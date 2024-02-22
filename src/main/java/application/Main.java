@@ -27,7 +27,7 @@ public class Main extends Application {
 
             String cssPath = Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm();
             scene.getStylesheets().add(cssPath);
-
+            
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
