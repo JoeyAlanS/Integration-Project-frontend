@@ -8,16 +8,12 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
-import model.Models;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            Models modelsInitializer = new Models();
-            modelsInitializer.initializeModels();
-
             Parent root = FXMLLoader.load(getClass().getResource("/mainView.fxml"));
 
             Scene scene = new Scene(root, 600, 325);

@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import java.util.List;
 import java.util.Map;
 
-public class MainControllerFrontend {
+public class Main{
 
     @FXML
     private TitledPane titledPaneModels;
