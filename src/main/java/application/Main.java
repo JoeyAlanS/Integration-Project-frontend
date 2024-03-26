@@ -6,27 +6,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
 import java.io.IOException;
-import java.util.Objects;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/mainView.fxml"));
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mainView.fxml"));
+            Parent root = loader.load();
             Scene scene = new Scene(root, 600, 325);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Projeto de integração");
-
-            String iconPath = "file:src/main/resources/icon_logo_eletra.png";
-            Image icon = new Image(iconPath);
+            Image icon = new Image(getClass().getResourceAsStream("/icons/icon_logo_eletra.png"));
             primaryStage.getIcons().add(icon);
-
-            String cssPath = Objects.requireNonNull(getClass().getResource("/styles.css")).toExternalForm();
+            String cssPath = getClass().getResource("/view/styles.css").toExternalForm();
             scene.getStylesheets().add(cssPath);
-
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
