@@ -1,8 +1,8 @@
 package mainController;
 
-import dao.CategoryDAO;
-import dao.LineupDAO;
-import dao.ModelDAO;
+import DAO.CategoryDAO;
+import DAO.LineupDAO;
+import DAO.ModelDAO;
 import config.HibernateConfig;
 import org.hibernate.Session;
 import javafx.collections.FXCollections;
