@@ -6,7 +6,7 @@
 
     <groupId>com.br.eletra</groupId>
     <artifactId>Integration-Project-Frontend</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <dependencies>
         <dependency>
