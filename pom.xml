@@ -34,39 +34,31 @@
             <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.6.0</version>
+                <version>8.8.3</version>
                 <configuration>
-                    <mainClass>main.Main</mainClass>
+                    <mainClass>application.Main</mainClass>
+                    <verbose>true</verbose>
+                    <vendor>Joey</vendor>
+                    <bundleArguments>
+                        <identifier>Integration-Project-Identifier</identifier>
+                        <installdirChooser>true</installdirChooser>
+                    </bundleArguments>
+                    <additionalAppResources>${project.basedir}/src/main/resources</additionalAppResources>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>create-jar</id>
+                        <id>create-javaFxJar</id>
                         <phase>package</phase>
                         <goals>
                             <goal>build-jar</goal>
                         </goals>
                     </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
                     <execution>
-                        <id>compile-installer</id>
+                        <id>create-native</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>build-native</goal>
                         </goals>
-                        <configuration>
-                            <executable>iscc</executable>
-                            <arguments>
-                                <argument>src/main/installerIntegration_Project.iss</argument>
-                            </arguments>
-                            <workingDirectory>${project.basedir}</workingDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
