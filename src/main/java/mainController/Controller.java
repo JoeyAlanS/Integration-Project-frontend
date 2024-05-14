@@ -1,17 +1,15 @@
 package mainController;
 
-import dao.CategoryDAO;
-import dao.LineupDAO;
-import dao.ModelDAO;
-import config.HibernateConfig;
-import org.hibernate.Session;
+import dto.CategoryDTO;
+import dto.LineupDTO;
+import dto.ModelDTO;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import model.LineupEntity;
-import model.CategoryEntity;
-import model.ModelEntity;
+import services.LineupService;
+import services.CategoryService;
+import services.ModelService;
 
 import java.net.URL;
 import java.util.List;
@@ -20,10 +18,10 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML
-    private ComboBox<LineupEntity> comboBox;
+    private ComboBox<LineupDTO> comboBox;
 
     @FXML
-    private TreeView<LineupEntity> treeView;
+    private TreeView<LineupDTO> treeView;
 
     @FXML
     private TitledPane titledLineup;
@@ -34,10 +32,9 @@ public class Controller implements Initializable {
     @FXML
     private Accordion accordion;
 
-    private final Session session = HibernateConfig.buildSessionFactory().openSession();
-    private final LineupDAO lineupDAO = new LineupDAO(session);
-    private final CategoryDAO categoryDAO = new CategoryDAO(session);
-    private final ModelDAO modelDAO = new ModelDAO(session);
+    LineupService lineupService = new LineupService();
+    CategoryService categoryService = new CategoryService();
+    ModelService modelsService = new ModelService();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,27 +44,27 @@ public class Controller implements Initializable {
     }
 
     private void comboBoxSelect() {
-        List<LineupEntity> lineList = lineupDAO.getAllLineups();
+        List<LineupDTO> lineList = lineupService.getAllLineup();
         comboBox.setItems(FXCollections.observableArrayList(lineList));
         comboBox.valueProperty().addListener(((observable, oldValue, newValue) -> openTreeView(newValue)));
     }
 
-    private void openTreeView(LineupEntity selectedLine) {
+    private void openTreeView(LineupDTO selectedLine) {
         titledLineup.setExpanded(false);
         titledModels.setDisable(false);
         titledModels.setExpanded(true);
 
-        List<CategoryEntity> categoryList = categoryDAO.getCategoriesForLine(selectedLine);
+        List<CategoryDTO> categoryList = categoryService.getAllCategories(selectedLine);
         TreeItem showTreeView = new TreeItem<>(selectedLine);
         showTreeView.setExpanded(true);
 
         categoryList.forEach((category) -> {
-            TreeItem<CategoryEntity> categoryItem = new TreeItem<>(category);
+            TreeItem<CategoryDTO> categoryItem = new TreeItem<>(category);
             showTreeView.getChildren().add(categoryItem);
 
-            List<ModelEntity> ModelEntityList = modelDAO.getModelsForCategory(category);
+            List<ModelDTO> modelsList = modelsService.getAllModels(category);
 
-            ModelEntityList.forEach((model) -> categoryItem.getChildren().add(new TreeItem(model)));
+            modelsList.forEach((model) -> categoryItem.getChildren().add(new TreeItem(model)));
         });
         treeView.setRoot(showTreeView);
     }
