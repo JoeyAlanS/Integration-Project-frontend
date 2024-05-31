@@ -9,12 +9,14 @@
     <version>1.0</version>
 
     <dependencies>
+        <!--
         <dependency>
             <groupId>com.br.eletra</groupId>
             <artifactId>Integration-Project-Backend</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.openjfx</groupId>

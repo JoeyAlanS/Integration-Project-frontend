@@ -1,8 +1,3 @@
-variables:
-  MAVEN_VERSION: "3.9.6"
-  MAVEN_HOME: "C:\\apache-maven-4.0.0-alpha-7"
-  JAVA_HOME: "C:\\Program Files (x86)\\Java\\jdk1.8.0_51"
-
 stages:
   - clean
   - package
@@ -24,7 +19,7 @@ package:
   artifacts:
     name: exepath
     paths: 
-      - frontend\target\jfx\native\Integration_Project_Frontend_1.0.exe
+      - target\jfx\native\Integration_Project_Frontend_1.0.exe
 
 deploy:
   tags:
