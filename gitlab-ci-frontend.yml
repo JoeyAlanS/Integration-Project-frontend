@@ -26,6 +26,5 @@ deploy:
     - Shell-Maven
   stage: deploy
   script:
-    - copy target/jfx/native/Integration_Project_Frontend_1.0.exe 
+    - copy target\jfx\native\Integration_Project_Frontend_1.0.exe "C:\Users\joeye\OneDrive\Área de  Trabalho\Pasta_compartilhada\"
     - echo "Implementation of the app"
-
