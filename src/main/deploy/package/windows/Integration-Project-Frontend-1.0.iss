@@ -37,3 +37,19 @@ Filename: "{app}\Integration-Project-Frontend-1.0.exe"; Parameters: "-install -s
 
 [UninstallRun]
 Filename: "{app}\Integration-Project-Frontend-1.0.exe"; Parameters: "-uninstall"; Flags: runhidden
+
+[Code]
+function returnTrue(): Boolean;
+begin
+  Result := True;
+end;
+
+function returnFalse(): Boolean;
+begin
+  Result := False;
+end;
+
+function InitializeSetup(): Boolean;
+begin
+  Result := True;
+end;
