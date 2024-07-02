@@ -8,6 +8,7 @@ import services.LineupService;
 import services.ModelService;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -36,31 +37,41 @@ public class ControllerTest extends ApplicationTest {
         mainController.modelsService = Mockito.mock(ModelService.class);
     }
 
+    @After
+    public void tearDown() {
+        mainController.titledModels = null;
+        mainController.titledLineup = null;
+        mainController.comboBox = null;
+        mainController.treeView = null;
+        mainController.accordion = null;
+        mainController = null;
+    }
+
     @Test
-    public void initializeControllerTest() {
+    public void testInitialize() {
         // Given
         Mockito.doNothing().when(mainController).comboBoxSelect();
-        mainController.titledLineup.setDisable(true);
 
         // When
         mainController.initialize(null, null);
 
         // Then
-        assertEquals(mainController.titledLineup, mainController.accordion.getExpandedPane());
+        assertEquals(mainController.accordion.getExpandedPane(), mainController.titledLineup);
         assertTrue(mainController.titledModels.isDisable());
-        verify(mainController).comboBoxSelect();
+        assertTrue(mainController.comboBox.getItems().isEmpty());
+        assertNull(mainController.treeView.getRoot());
     }
 
     @Test
-    public void comboBoxSelectTest01() {
+    public void comboBoxSelectTest() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
-        LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
+        mockList.add(new LineupDTO("Ares", (short) 1));
+        mockList.add(new LineupDTO("Cronos", (short) 2));
         Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
-        mainController.comboBoxSelect();
 
         // When
-        mainController.openTreeView(mockLine);
+        mainController.comboBoxSelect();
 
         // Then
         assertEquals(FXCollections.observableArrayList(mockList), mainController.comboBox.getItems());
@@ -68,160 +79,76 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxSelectTest02() {
+    public void comboBoxSelectEmptyTest() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
-        mockList.add(new LineupDTO("Ares", (short) 1));
-        mockList.add(new LineupDTO("Cronos", (short) 2));
         Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
-        mainController.comboBoxSelect();
-        mainController.comboBox.setValue(mainController.comboBox.getItems().get(0));
 
         // When
-        mainController.openTreeView(mockList.get(0));
+        mainController.comboBoxSelect();
 
         // Then
-        verify(mainController, times(2)).openTreeView(mainController.comboBox.getItems().get(0));
+        assertTrue(mainController.comboBox.getItems().isEmpty());
+        verify(mainController.lineupService).getAllLineup();
     }
 
     @Test
-    public void comboBoxSelectTest03() {
-        // Given
-        List<LineupDTO> mockList = new ArrayList<>();
-        mockList.add(new LineupDTO("Ares", (short) 1));
-        mockList.add(new LineupDTO("Cronos", (short) 2));
-        Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
-        mainController.comboBoxSelect();
-        mainController.comboBox.setValue(mainController.comboBox.getItems().get(1));
-
-        // When
-        mainController.openTreeView(mockList.get(0));
-
-        // Then
-        verify(mainController).openTreeView(mainController.comboBox.getItems().get(1));
-    }
-
-    @Test
-    public void comboBoxSelectTest04() {
-        // Given
-        List<LineupDTO> mockList = new ArrayList<>();
-        mockList.add(new LineupDTO("Ares", (short) 1));
-        Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
-        mainController.comboBoxSelect();
-
-        // When
-        mainController.openTreeView(mockList.get(0));
-
-        // Then
-        assertFalse(mainController.comboBox.getItems().isEmpty());
-    }
-
-    @Test
-    public void openTreeViewTest01() {
+    public void openTreeViewTest() {
         // Given
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
-        CategoryDTO mockCategory = new CategoryDTO("Ares TB", (short) 1);
-        ModelDTO mockModel = new ModelDTO("Ares 7021", (short) 1);
+        CategoryDTO mockCategory1 = new CategoryDTO("Ares TB", (short) 1);
+        CategoryDTO mockCategory2 = new CategoryDTO("Ares LB", (short) 2);
+        ModelDTO mockModel1 = new ModelDTO("Ares 7021", (short) 1);
+        ModelDTO mockModel2 = new ModelDTO("Ares 7022", (short) 2);
         List<CategoryDTO> mockCategoryList = new ArrayList<>();
-        mockCategoryList.add(mockCategory);
-        List<ModelDTO> mockModelList = new ArrayList<>();
-        TreeItem<ModelDTO> mockTreeModel = new TreeItem<>(mockModel);
-        TreeItem mockTreeCategory = new TreeItem<>(mockCategory);
-        TreeItem mockTreeView = new TreeItem<>(mockLine);
-        mockTreeView.getChildren().add(mockTreeCategory);
-        mockTreeCategory.getChildren().add(mockTreeModel);
-        mainController.openTreeView(mockLine);
+        mockCategoryList.add(mockCategory1);
+        mockCategoryList.add(mockCategory2);
+        List<ModelDTO> mockModelList1 = new ArrayList<>();
+        List<ModelDTO> mockModelList2 = new ArrayList<>();
+        mockModelList1.add(mockModel1);
+        mockModelList2.add(mockModel2);
+
+        when(mainController.categoryService.getAllCategories(mockLine)).thenReturn(mockCategoryList);
+        when(mainController.modelsService.getAllModels(mockCategory1)).thenReturn(mockModelList1);
+        when(mainController.modelsService.getAllModels(mockCategory2)).thenReturn(mockModelList2);
 
         // When
-        mainController.titledLineup.setExpanded(false);
-        mainController.titledModels.setDisable(false);
-        mainController.titledModels.setExpanded(true);
-        when(mainController.categoryService.getAllCategories(mockLine)).thenReturn(mockCategoryList);
-        when(mainController.modelsService.getAllModels(mockCategory)).thenReturn(mockModelList);
-        mockTreeView.setExpanded(true);
-
+        mainController.openTreeView(mockLine);
 
         // Then
         assertFalse(mainController.titledLineup.isExpanded());
         assertFalse(mainController.titledModels.isDisable());
         assertTrue(mainController.titledModels.isExpanded());
         assertTrue(mainController.treeView.isVisible());
-        assertTrue(mockTreeView.isExpanded());
-        assertEquals(mainController.treeView.getTreeItem(0).getValue(), mockLine);
-        assertEquals(mockTreeView.getChildren().toString(), "[TreeItem [ value: " + mockCategory + " ]]");
-        assertEquals(mockTreeCategory.getChildren().toString(), "[TreeItem [ value: " + mockModel + " ]]");
-        assertEquals(mainController.treeView.getExpandedItemCount(), 1);
+
+        TreeItem lineupTreeItem = mainController.treeView.getTreeItem(0);
+        assertEquals(lineupTreeItem.getValue(), mockLine);
+
+        List<TreeItem> categoryItems = lineupTreeItem.getChildren();
+        assertEquals(2, categoryItems.size());
+        assertEquals(categoryItems.get(0).getValue(), mockCategory1);
+        assertEquals(categoryItems.get(1).getValue(), mockCategory2);
+
+        List<TreeItem> modelItems1 = categoryItems.get(0).getChildren();
+        List<TreeItem> modelItems2 = categoryItems.get(1).getChildren();
+        assertEquals(1, modelItems1.size());
+        assertEquals(1, modelItems2.size());
+        assertEquals(modelItems1.get(0).getValue(), mockModel1);
+        assertEquals(modelItems2.get(0).getValue(), mockModel2);
     }
 
     @Test
-    public void openTreeViewTest02() {
+    public void openTreeViewEmptyTest() {
         // Given
-        LineupDTO mockLine = new LineupDTO("Cronos", (short) 2);
-        CategoryDTO mockCategory = new CategoryDTO("Cronos Old", (short) 3);
-        ModelDTO mockModel = new ModelDTO("Cronos 6001-A", (short) 1);
+        LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
         List<CategoryDTO> mockCategoryList = new ArrayList<>();
-        mockCategoryList.add(mockCategory);
-        List<ModelDTO> mockModelList = new ArrayList<>();
-        TreeItem mockTreeModel = new TreeItem<>(mockModel);
-        TreeItem mockTreeCategory = new TreeItem<>(mockCategory);
-        TreeItem mockTreeView = new TreeItem<>(mockLine);
-        mockTreeView.getChildren().add(mockTreeCategory);
-        mockTreeCategory.getChildren().add(mockTreeModel);
-        mainController.openTreeView(mockLine);
+
+        when(mainController.categoryService.getAllCategories(mockLine)).thenReturn(mockCategoryList);
 
         // When
-        mainController.titledLineup.setExpanded(true);
-        mainController.titledModels.setDisable(true);
-        mainController.titledModels.setExpanded(true);
-        when(mainController.categoryService.getAllCategories(mockLine)).thenReturn(mockCategoryList);
-        when(mainController.modelsService.getAllModels(mockCategory)).thenReturn(mockModelList);
-        mockTreeView.setExpanded(true);
-
-        // Then
-        assertTrue(mainController.titledLineup.isExpanded());
-        assertTrue(mainController.titledModels.isDisable());
-        assertTrue(mainController.titledModels.isExpanded());
-        assertTrue(mainController.treeView.isVisible());
-        assertTrue(mockTreeView.isExpanded());
-        assertEquals(mainController.treeView.getTreeItem(0).getValue(), mockLine);
-        assertEquals(mockTreeView.getChildren().toString(), "[TreeItem [ value: " + mockCategory + " ]]");
-        assertEquals(mockTreeCategory.getChildren().toString(), "[TreeItem [ value: " + mockModel + " ]]");
-        assertEquals(mainController.treeView.getExpandedItemCount(), 1);
-    }
-
-    @Test
-    public void openTreeViewTest03() {
-        // Given
-        LineupDTO mockLine = new LineupDTO("Cronos", (short) 2);
-        CategoryDTO mockCategory = new CategoryDTO("Cronos Old", (short) 3);
-        ModelDTO mockModel = new ModelDTO("Cronos 6001-A", (short) 1);
-        List<CategoryDTO> mockCategoryList = new ArrayList<>();
-        mockCategoryList.add(mockCategory);
-        List<ModelDTO> mockModelList = new ArrayList<>();
-        TreeItem mockTreeModel = new TreeItem<>(mockModel);
-        TreeItem mockTreeCategory = new TreeItem<>(mockCategory);
-        TreeItem mockTreeView = new TreeItem<>(mockLine);
-        mockTreeView.getChildren().add(mockTreeCategory);
-        mockTreeCategory.getChildren().add(mockTreeModel);
         mainController.openTreeView(mockLine);
 
-        // When
-        mainController.titledLineup.setExpanded(false);
-        mainController.titledModels.setDisable(false);
-        mainController.titledModels.setExpanded(true);
-        when(mainController.categoryService.getAllCategories(mockLine)).thenReturn(mockCategoryList);
-        when(mainController.modelsService.getAllModels(mockCategory)).thenReturn(mockModelList);
-        mockTreeView.setExpanded(true);
-
         // Then
-        assertFalse(mainController.titledLineup.isExpanded());
-        assertFalse(mainController.titledModels.isDisable());
-        assertTrue(mainController.titledModels.isExpanded());
-        assertTrue(mainController.treeView.isVisible());
-        assertTrue(mockTreeView.isExpanded());
-        assertEquals(mainController.treeView.getTreeItem(0).getValue(), mockLine);
-        assertEquals(mockTreeView.getChildren().toString(), "[TreeItem [ value: " + mockCategory + " ]]");
-        assertEquals(mockTreeCategory.getChildren().toString(), "[TreeItem [ value: " + mockModel + " ]]");
-        assertEquals(mainController.treeView.getExpandedItemCount(), 1);
+        assertTrue(mainController.treeView.getRoot().getChildren().isEmpty());
     }
 }
