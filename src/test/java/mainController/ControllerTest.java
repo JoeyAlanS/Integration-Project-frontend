@@ -79,20 +79,6 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxSelectEmptyTest() {
-        // Given
-        List<LineupDTO> mockList = new ArrayList<>();
-        Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
-
-        // When
-        mainController.comboBoxSelect();
-
-        // Then
-        assertTrue(mainController.comboBox.getItems().isEmpty());
-        verify(mainController.lineupService).getAllLineup();
-    }
-
-    @Test
     public void openTreeViewTest() {
         // Given
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);

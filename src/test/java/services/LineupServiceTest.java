@@ -3,7 +3,7 @@ package services;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dto.LineupDTO;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -28,7 +28,7 @@ public class LineupServiceTest {
     private Invocation.Builder builder;
     private Response response;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         client = mock(Client.class);
         webTarget = mock(WebTarget.class);
