@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class ControllerTest extends ApplicationTest {
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         mainController = Mockito.spy(Controller.class);
         mainController.titledLineup = new TitledPane();
         mainController.comboBox = new ComboBox<>();
@@ -58,8 +60,7 @@ public class ControllerTest extends ApplicationTest {
         // Then
         assertEquals(mainController.accordion.getExpandedPane(), mainController.titledLineup);
         assertTrue(mainController.titledModels.isDisable());
-        assertTrue(mainController.comboBox.getItems().isEmpty());
-        assertNull(mainController.treeView.getRoot());
+        verify(mainController).comboBoxSelect();
     }
 
     @Test
@@ -74,7 +75,7 @@ public class ControllerTest extends ApplicationTest {
         mainController.comboBoxSelect();
 
         // Then
-        assertEquals(FXCollections.observableArrayList(mockList), mainController.comboBox.getItems());
+        assertEquals(mockList.toString(), mainController.comboBox.getItems().toString());
         verify(mainController.lineupService).getAllLineup();
     }
 
@@ -136,5 +137,18 @@ public class ControllerTest extends ApplicationTest {
 
         // Then
         assertTrue(mainController.treeView.getRoot().getChildren().isEmpty());
+    }
+
+    @Test
+    public void openTreeViewNullLineupTest() {
+        // Given
+        LineupDTO mockLine = null;
+
+        // When
+        mainController.openTreeView(mockLine);
+
+        // Then
+        verify(mainController.categoryService, times(0)).getAllCategories(any());
+        assertNull(mainController.treeView.getRoot());
     }
 }

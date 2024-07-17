@@ -50,6 +50,11 @@ public class Controller implements Initializable {
     }
 
     protected void openTreeView(LineupDTO selectedLine) {
+        if (selectedLine == null) {
+            treeView.setRoot(null);
+            return;
+        }
+
         titledLineup.setExpanded(false);
         titledModels.setDisable(false);
         titledModels.setExpanded(true);

@@ -58,7 +58,6 @@ public class LineupServiceTest {
         List<LineupDTO> result = service.getAllLineup();
 
         // Then
-        assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(expectedList.toString(), result.toString());
         verify(client).target(eq("http://localhost:8080/api/lines"));

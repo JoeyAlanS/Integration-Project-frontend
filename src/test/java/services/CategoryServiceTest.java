@@ -48,7 +48,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void getAllCategoriesAndConvertToStringTest01() {
+    public void getAllCategoriesAndConvertToStringTestWithValidLineup() {
         // Given
         String jsonResponse = "[{\"id\":2,\"categoryName\":\"Cronos L\",\"line\":\"Cronos\"},{\"id\":3,\"categoryName\":\"Cronos NG\",\"line\": \"Cronos\"},{\"id\": 4,\"categoryName\":\"Ares TB\",\"line\": \"Ares\"},{\"id\":5,\"categoryName\":\"Ares THS\",\"line\":\"Ares\"},{\"id\":1,\"categoryName\":\"Cronos Old\",\"line\": \"Cronos\"}]";
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
@@ -62,7 +62,6 @@ public class CategoryServiceTest {
         List<CategoryDTO> result = service.getAllCategories(mockLine);
 
         // Then
-        assertNotNull(result);
         assertEquals(response.readEntity(String.class), jsonResponse);
         assertEquals(5, result.size());
         assertEquals(result.toString(), mockCategoryList.toString());
@@ -72,7 +71,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void getAllCategoriesAndConvertToStringTest02() {
+    public void  getAllCategoriesAndConvertToStringTestWithInvalidLineup() {
         // Given
         String jsonResponse = "[{\"id\":2,\"categoryName\":\"Cronos L\",\"line\":\"Cronos\"},{\"id\":3,\"categoryName\":\"Cronos NG\",\"line\": \"Cronos\"},{\"id\": 4,\"categoryName\":\"Ares TB\",\"line\": \"Ares\"},{\"id\":5,\"categoryName\":\"Ares THS\",\"line\":\"Ares\"},{\"id\":1,\"categoryName\":\"Cronos Old\",\"line\": \"Cronos\"}]";
         LineupDTO mockLine = new LineupDTO("1", (short) 1);
@@ -94,4 +93,21 @@ public class CategoryServiceTest {
         verify(webTarget).request(MediaType.APPLICATION_JSON);
         verify(builder).get();
     }
+
+    @Test
+    public void getAllCategoriesAndConvertToStringTestWithNullLineup() {
+        // Given
+        LineupDTO mockLine = null;
+
+        // When
+        List<CategoryDTO> result = service.getAllCategories(mockLine);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(client, times(0)).target(anyString());
+        verify(webTarget, times(0)).request(anyString());
+        verify(builder, times(0)).get();
+    }
+
 }

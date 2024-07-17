@@ -48,10 +48,10 @@ public class ModelServiceTest {
     }
 
     @Test
-    public void getAllModelsAndConvertToStringTest() {
+    public void getAllModelsAndConvertToStringTestWithValidCategory() {
         // Given
         String jsonResponse = "[{\"id\":1,\"modelName\":\"Cronos 6001-A\",\"category\":\"Cronos Old\"},{\"id\": 2,\"modelName\":\"Cronos 6003\",\"category\":\"Cronos Old\"},{\"id\":3,\"modelName\":\"Cronos 7023\",\"category\":\"Cronos Old\"},{\"id\":4,\"modelName\":\"Cronos 6021L\",\"category\":\"Cronos L\"},{\"id\":5,\"modelName\":\"Cronos 7023L\",\"category\":\"Cronos L\"},{\"id\":6,\"modelName\":\"Cronos 6001-NG\",\"category\":\"Cronos NG\"},{\"id\":7,\"modelName\":\"Cronos 6003-NG\",\"category\":\"Cronos NG\"},{\"id\":8,\"modelName\":\"Cronos 6021-NG\",\"category\":\"Cronos NG\"},{\"id\":9,\"modelName\":\"Cronos 6031-NG\",\"category\":\"Cronos NG\"},{\"id\":10,\"modelName\":\"Cronos 7021-NG\",\"category\":\"Cronos NG\"},{\"id\":11,\"modelName\":\"Cronos 7023-NG\",\"category\":\"Cronos NG\"},{\"id\":12,\"modelName\":\"Ares 7021\",\"category\":\"Ares TB\"},{\"id\":13,\"modelName\":\"Ares 7031\",\"category\":\"Ares TB\"},{\"id\":14,\"modelName\":\"Ares 7023\",\"category\":\"Ares TB\"},{\"id\":15,\"modelName\":\"Ares 8023 15\",\"category\":\"Ares THS\"},{\"id\":16,\"modelName\":\"Ares 8023 200\",\"category\":\"Ares THS\"},{\"id\":17,\"modelName\":\"Ares 8023 2,5\",\"category\":\"Ares THS\"}]";
-        CategoryDTO mockCategory = new CategoryDTO("Ares%20TB", (short) 1);
+        CategoryDTO mockCategory = new CategoryDTO("Ares TB", (short) 1);
         Gson mockGson = new Gson();
         when(response.readEntity(String.class)).thenReturn(jsonResponse);
         Type mockModelListType = new TypeToken<List<ModelDTO>>() {
@@ -62,12 +62,27 @@ public class ModelServiceTest {
         List<ModelDTO> result = service.getAllModels(mockCategory);
 
         //Then
-        assertNotNull(result);
         assertEquals(17, result.size());
         assertEquals(result.toString(), mockList.toString());
         verify(client).target(eq("http://localhost:8080/api/models" + "/" + mockCategory));
         verify(webTarget).request(MediaType.APPLICATION_JSON);
         verify(builder).get();
+    }
+
+    @Test
+    public void getAllModelsAndConvertToStringTestWithNullCategory() {
+        // Given
+        CategoryDTO mockCategory = null;
+
+        // When
+        List<ModelDTO> result = service.getAllModels(mockCategory);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(client, times(0)).target(anyString());
+        verify(webTarget, times(0)).request(anyString());
+        verify(builder, times(0)).get();
     }
 
 }
