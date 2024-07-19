@@ -73,10 +73,12 @@ public class ControllerTest extends ApplicationTest {
 
         // When
         mainController.comboBoxSelect();
+        mainController.comboBox.getSelectionModel().select(0);
 
         // Then
         assertEquals(mockList.toString(), mainController.comboBox.getItems().toString());
         verify(mainController.lineupService).getAllLineup();
+        verify(mainController, times(1)).openTreeView(mockList.get(0));
     }
 
     @Test
