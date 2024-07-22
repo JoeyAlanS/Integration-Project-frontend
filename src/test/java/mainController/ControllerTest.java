@@ -73,12 +73,17 @@ public class ControllerTest extends ApplicationTest {
 
         // When
         mainController.comboBoxSelect();
-        mainController.comboBox.getSelectionModel().select(0);
+        LineupDTO selectedItem = mockList.get(0);
+        mainController.comboBox.getSelectionModel().select(selectedItem);
 
         // Then
         assertEquals(mockList.toString(), mainController.comboBox.getItems().toString());
         verify(mainController.lineupService).getAllLineup();
-        verify(mainController, times(1)).openTreeView(mockList.get(0));
+        verify(mainController, times(1)).openTreeView(selectedItem);
+        mainController.comboBox.valueProperty().set(null);
+        verify(mainController, times(1)).openTreeView(null);
+        mainController.comboBox.valueProperty().set(selectedItem);
+        verify(mainController, times(2)).openTreeView(selectedItem);
     }
 
     @Test
