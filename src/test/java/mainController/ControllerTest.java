@@ -79,6 +79,7 @@ public class ControllerTest extends ApplicationTest {
 
         // Then
         assertEquals(FXCollections.observableArrayList(mockList), mainController.comboBox.getItems());
+        assertEquals(mockList.toString(), mainController.comboBox.getItems().toString());
         verify(mainController.lineupService).getAllLineup();
         verify(mainController, times(1)).openTreeView(selectedItem);
 
