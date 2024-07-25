@@ -69,17 +69,17 @@ public class ControllerTest extends ApplicationTest {
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
         mockList.add(new LineupDTO("Cronos", (short) 2));
-        Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
+        when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
 
         // When
         mainController.comboBoxSelect();
-        LineupDTO selectedItem = mockList.get(0);
-        mainController.comboBox.getSelectionModel().select(selectedItem);
 
         // Then
         assertEquals(FXCollections.observableArrayList(mockList), mainController.comboBox.getItems());
-        assertEquals(mockList.toString(), mainController.comboBox.getItems().toString());
         verify(mainController.lineupService).getAllLineup();
+
+        LineupDTO selectedItem = mockList.get(0);
+        mainController.comboBox.getSelectionModel().select(selectedItem);
         verify(mainController, times(1)).openTreeView(selectedItem);
 
         mainController.comboBox.valueProperty().set(null);
@@ -93,7 +93,7 @@ public class ControllerTest extends ApplicationTest {
     public void comboBoxSelectEmptyTest() {
         // Given
         List<LineupDTO> emptyList = new ArrayList<>();
-        Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(emptyList);
+        when(mainController.lineupService.getAllLineup()).thenReturn(emptyList);
 
         // When
         mainController.comboBoxSelect();
@@ -109,7 +109,7 @@ public class ControllerTest extends ApplicationTest {
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
         mockList.add(new LineupDTO("Cronos", (short) 2));
-        Mockito.when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
+        when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
 
         // When
         mainController.comboBoxSelect();
