@@ -50,7 +50,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testInitialize() {
+    public void initializeTest() {
         // Given
         Mockito.doNothing().when(mainController).comboBoxSelect();
 
@@ -64,7 +64,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testComboBox01() {
+    public void comboBoxTest01() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -80,7 +80,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testComboBox02() {
+    public void comboBoxTest02() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -98,7 +98,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testComboBox03() {
+    public void comboBoxTest03() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -117,7 +117,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testComboBox04() {
+    public void comboBoxTest04() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
@@ -133,7 +133,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testComboBox05() {
+    public void comboBoxTest05() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -150,7 +150,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testComboBox06() {
+    public void comboBoxTest06() {
         // Given
         List<LineupDTO> emptyList = new ArrayList<>();
         when(mainController.lineupService.getAllLineup()).thenReturn(emptyList);
@@ -164,7 +164,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testComboBox07() {
+    public void comboBoxTest07() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -184,7 +184,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testOpenTreeView01() {
+    public void openTreeViewTest01() {
         // Given
         LineupDTO mockLineup = new LineupDTO("Ares", (short) 2);
         CategoryDTO mockCategory = new CategoryDTO("Ares TB", (short) 3);
@@ -211,7 +211,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testOpenTreeView02() {
+    public void openTreeViewTest02() {
         // Given
         LineupDTO mockLineup = new LineupDTO("Cronos", (short) 2);
         CategoryDTO mockCategory = new CategoryDTO("Cronos Old", (short) 1);
@@ -238,7 +238,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testOpenTreeView03() {
+    public void openTreeViewTest03() {
         // Given
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
         List<CategoryDTO> mockCategoryList = new ArrayList<>();
@@ -253,7 +253,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void testOpenTreeView04() {
+    public void openTreeViewTest04() {
         // Given
         LineupDTO mockLine = null;
 
