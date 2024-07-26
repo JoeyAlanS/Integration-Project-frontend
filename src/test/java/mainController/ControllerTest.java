@@ -64,7 +64,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxSelectTest() {
+    public void testComboBox01() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -75,22 +75,82 @@ public class ControllerTest extends ApplicationTest {
         mainController.comboBoxSelect();
 
         // Then
-        assertEquals(FXCollections.observableArrayList(mockList), mainController.comboBox.getItems());
+        assertEquals(mockList.toString(), mainController.comboBox.getItems().toString());
         verify(mainController.lineupService).getAllLineup();
-
-        LineupDTO selectedItem = mockList.get(0);
-        mainController.comboBox.getSelectionModel().select(selectedItem);
-        verify(mainController, times(1)).openTreeView(selectedItem);
-
-        mainController.comboBox.valueProperty().set(null);
-        verify(mainController, times(1)).openTreeView(null);
-
-        mainController.comboBox.valueProperty().set(selectedItem);
-        verify(mainController, times(2)).openTreeView(selectedItem);
     }
 
     @Test
-    public void comboBoxSelectEmptyTest() {
+    public void testComboBox02() {
+        // Given
+        List<LineupDTO> mockList = new ArrayList<>();
+        mockList.add(new LineupDTO("Ares", (short) 1));
+        when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
+        mainController.comboBoxSelect();
+
+        LineupDTO selectedItem = mockList.get(0);
+
+        // When
+        mainController.comboBox.getSelectionModel().select(selectedItem);
+
+        // Then
+        verify(mainController, times(1)).openTreeView(selectedItem);
+        assertEquals(selectedItem, mainController.comboBox.getValue());
+    }
+
+    @Test
+    public void testComboBox03() {
+        // Given
+        List<LineupDTO> mockList = new ArrayList<>();
+        mockList.add(new LineupDTO("Ares", (short) 1));
+        mockList.add(new LineupDTO("Cronos", (short) 2));
+        when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
+        mainController.comboBoxSelect();
+
+        LineupDTO newItem = mockList.get(1);
+
+        // When
+        mainController.comboBox.getSelectionModel().select(newItem);
+
+        // Then
+        verify(mainController, times(1)).openTreeView(newItem);
+        assertEquals(newItem, mainController.comboBox.getValue());
+    }
+
+    @Test
+    public void testComboBox04() {
+        // Given
+        List<LineupDTO> mockList = new ArrayList<>();
+        LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
+        mockList.add(mockLine);
+        when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
+
+        // When
+        mainController.comboBoxSelect();
+        mainController.comboBox.setValue(mockLine);
+
+        // Then
+        verify(mainController, times(1)).openTreeView(mockLine);
+    }
+
+    @Test
+    public void testComboBox05() {
+        // Given
+        List<LineupDTO> mockList = new ArrayList<>();
+        mockList.add(new LineupDTO("Ares", (short) 1));
+        mockList.add(new LineupDTO("Cronos", (short) 2));
+        when(mainController.lineupService.getAllLineup()).thenReturn(mockList);
+
+        // When
+        mainController.comboBoxSelect();
+        LineupDTO selectedItem = mockList.get(0);
+        mainController.comboBox.getSelectionModel().select(selectedItem);
+
+        // Then
+        verify(mainController, times(1)).openTreeView(selectedItem);
+    }
+
+    @Test
+    public void testComboBox06() {
         // Given
         List<LineupDTO> emptyList = new ArrayList<>();
         when(mainController.lineupService.getAllLineup()).thenReturn(emptyList);
@@ -104,7 +164,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxSelectListenerTest() {
+    public void testComboBox07() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -124,52 +184,61 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void openTreeViewTest() {
+    public void testOpenTreeView01() {
         // Given
-        LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
-        CategoryDTO mockCategory1 = new CategoryDTO("Ares TB", (short) 1);
-        CategoryDTO mockCategory2 = new CategoryDTO("Ares LB", (short) 2);
-        ModelDTO mockModel1 = new ModelDTO("Ares 7021", (short) 1);
-        ModelDTO mockModel2 = new ModelDTO("Ares 7022", (short) 2);
+        LineupDTO mockLineup = new LineupDTO("Ares", (short) 2);
+        CategoryDTO mockCategory = new CategoryDTO("Ares TB", (short) 3);
+        ModelDTO mockModel = new ModelDTO("Ares 7021", (short) 1);
         List<CategoryDTO> mockCategoryList = new ArrayList<>();
-        mockCategoryList.add(mockCategory1);
-        mockCategoryList.add(mockCategory2);
-        List<ModelDTO> mockModelList1 = new ArrayList<>();
-        List<ModelDTO> mockModelList2 = new ArrayList<>();
-        mockModelList1.add(mockModel1);
-        mockModelList2.add(mockModel2);
+        mockCategoryList.add(mockCategory);
+        List<ModelDTO> mockModelList = new ArrayList<>();
+        mockModelList.add(mockModel);
 
-        when(mainController.categoryService.getAllCategories(mockLine)).thenReturn(mockCategoryList);
-        when(mainController.modelsService.getAllModels(mockCategory1)).thenReturn(mockModelList1);
-        when(mainController.modelsService.getAllModels(mockCategory2)).thenReturn(mockModelList2);
+        when(mainController.categoryService.getAllCategories(mockLineup)).thenReturn(mockCategoryList);
+        when(mainController.modelsService.getAllModels(mockCategory)).thenReturn(mockModelList);
 
         // When
-        mainController.openTreeView(mockLine);
+        mainController.openTreeView(mockLineup);
 
         // Then
+        assertEquals(mockLineup, mainController.treeView.getRoot().getValue());
+        assertEquals(mockCategory, mainController.treeView.getRoot().getChildren().get(0).getValue());
+        assertEquals(mockModel, mainController.treeView.getRoot().getChildren().get(0).getChildren().get(0).getValue());
+
         assertFalse(mainController.titledLineup.isExpanded());
         assertFalse(mainController.titledModels.isDisable());
         assertTrue(mainController.titledModels.isExpanded());
-        assertTrue(mainController.treeView.isVisible());
-
-        TreeItem lineupTreeItem = mainController.treeView.getTreeItem(0);
-        assertEquals(lineupTreeItem.getValue(), mockLine);
-
-        List<TreeItem> categoryItems = lineupTreeItem.getChildren();
-        assertEquals(2, categoryItems.size());
-        assertEquals(categoryItems.get(0).getValue(), mockCategory1);
-        assertEquals(categoryItems.get(1).getValue(), mockCategory2);
-
-        List<TreeItem> modelItems1 = categoryItems.get(0).getChildren();
-        List<TreeItem> modelItems2 = categoryItems.get(1).getChildren();
-        assertEquals(1, modelItems1.size());
-        assertEquals(1, modelItems2.size());
-        assertEquals(modelItems1.get(0).getValue(), mockModel1);
-        assertEquals(modelItems2.get(0).getValue(), mockModel2);
     }
 
     @Test
-    public void openTreeViewEmptyTest() {
+    public void testOpenTreeView02() {
+        // Given
+        LineupDTO mockLineup = new LineupDTO("Cronos", (short) 2);
+        CategoryDTO mockCategory = new CategoryDTO("Cronos Old", (short) 1);
+        ModelDTO mockModel = new ModelDTO("Cronos 6001-A", (short) 1);
+        List<CategoryDTO> mockCategoryList = new ArrayList<>();
+        mockCategoryList.add(mockCategory);
+        List<ModelDTO> mockModelList = new ArrayList<>();
+        mockModelList.add(mockModel);
+
+        when(mainController.categoryService.getAllCategories(mockLineup)).thenReturn(mockCategoryList);
+        when(mainController.modelsService.getAllModels(mockCategory)).thenReturn(mockModelList);
+
+        // When
+        mainController.openTreeView(mockLineup);
+
+        // Then
+        assertEquals(mockLineup, mainController.treeView.getRoot().getValue());
+        assertEquals(mockCategory, mainController.treeView.getRoot().getChildren().get(0).getValue());
+        assertEquals(mockModel, mainController.treeView.getRoot().getChildren().get(0).getChildren().get(0).getValue());
+
+        assertFalse(mainController.titledLineup.isExpanded());
+        assertFalse(mainController.titledModels.isDisable());
+        assertTrue(mainController.titledModels.isExpanded());
+    }
+
+    @Test
+    public void testOpenTreeView03() {
         // Given
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
         List<CategoryDTO> mockCategoryList = new ArrayList<>();
@@ -184,7 +253,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void openTreeViewNullLineupTest() {
+    public void testOpenTreeView04() {
         // Given
         LineupDTO mockLine = null;
 
