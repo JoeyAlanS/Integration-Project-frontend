@@ -64,7 +64,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxTest01() {
+    public void comboBoxSelectTest01() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -80,7 +80,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxTest02() {
+    public void comboBoxSelectTest02() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -98,7 +98,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxTest03() {
+    public void comboBoxSelectTest03() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -117,7 +117,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxTest04() {
+    public void comboBoxSelectTest04() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
@@ -133,7 +133,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxTest05() {
+    public void comboBoxSelectTest05() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));
@@ -150,7 +150,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxTest06() {
+    public void comboBoxSelectTest06() {
         // Given
         List<LineupDTO> emptyList = new ArrayList<>();
         when(mainController.lineupService.getAllLineup()).thenReturn(emptyList);
@@ -164,7 +164,7 @@ public class ControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void comboBoxTest07() {
+    public void comboBoxTestSelect07() {
         // Given
         List<LineupDTO> mockList = new ArrayList<>();
         mockList.add(new LineupDTO("Ares", (short) 1));

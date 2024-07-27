@@ -44,7 +44,7 @@ public class LineupServiceTest {
     }
 
     @Test
-    public void getAllLinesAndConvertToStringTest() {
+    public void getAllLinesConvertToStringTest01() {
         // Given
         String jsonResponse = "[{\"id\":1,\"name\":\"Ares\"},{\"id\":2,\"name\":\"Cronos\"}]";
         Gson gson = new Gson();

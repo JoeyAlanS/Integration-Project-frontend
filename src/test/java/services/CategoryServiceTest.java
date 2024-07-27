@@ -48,7 +48,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void getAllCategoriesAndConvertToStringTestWithValidLineup() {
+    public void getAllCategoriesConvertToStringTest01() {
         // Given
         String jsonResponse = "[{\"id\":2,\"categoryName\":\"Cronos L\",\"line\":\"Cronos\"},{\"id\":3,\"categoryName\":\"Cronos NG\",\"line\": \"Cronos\"},{\"id\": 4,\"categoryName\":\"Ares TB\",\"line\": \"Ares\"},{\"id\":5,\"categoryName\":\"Ares THS\",\"line\":\"Ares\"},{\"id\":1,\"categoryName\":\"Cronos Old\",\"line\": \"Cronos\"}]";
         LineupDTO mockLine = new LineupDTO("Ares", (short) 1);
@@ -71,7 +71,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void  getAllCategoriesAndConvertToStringTestWithInvalidLineup() {
+    public void  getAllCategoriesConvertToStringTest02() {
         // Given
         String jsonResponse = "[{\"id\":2,\"categoryName\":\"Cronos L\",\"line\":\"Cronos\"},{\"id\":3,\"categoryName\":\"Cronos NG\",\"line\": \"Cronos\"},{\"id\": 4,\"categoryName\":\"Ares TB\",\"line\": \"Ares\"},{\"id\":5,\"categoryName\":\"Ares THS\",\"line\":\"Ares\"},{\"id\":1,\"categoryName\":\"Cronos Old\",\"line\": \"Cronos\"}]";
         LineupDTO mockLine = new LineupDTO("1", (short) 1);
@@ -95,7 +95,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void getAllCategoriesAndConvertToStringTestWithNullLineup() {
+    public void getAllCategoriesConvertToStringTest03() {
         // Given
         LineupDTO mockLine = null;
 
