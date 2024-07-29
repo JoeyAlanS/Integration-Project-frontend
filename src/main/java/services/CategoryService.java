@@ -13,6 +13,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 
 public class CategoryService {
@@ -20,6 +21,9 @@ public class CategoryService {
     Client client = ClientBuilder.newClient(new ClientConfig());
 
     public List<CategoryDTO> getAllCategories(LineupDTO selectedLine) {
+        if (selectedLine == null) {
+            return Collections.emptyList();
+        }
         WebTarget myResource = client.target(BASE_URL + "/" + selectedLine.getLineName());
         Invocation.Builder builder = myResource.request(MediaType.APPLICATION_JSON);
         Response response = builder.get();

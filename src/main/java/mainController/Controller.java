@@ -18,19 +18,19 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML
-    private ComboBox<LineupDTO> comboBox;
+    protected ComboBox<LineupDTO> comboBox;
 
     @FXML
-    private TreeView<LineupDTO> treeView;
+    protected TreeView<LineupDTO> treeView;
 
     @FXML
-    private TitledPane titledLineup;
+    protected TitledPane titledLineup;
 
     @FXML
-    private TitledPane titledModels;
+    protected TitledPane titledModels;
 
     @FXML
-    private Accordion accordion;
+    protected Accordion accordion;
 
     LineupService lineupService = new LineupService();
     CategoryService categoryService = new CategoryService();
@@ -43,13 +43,18 @@ public class Controller implements Initializable {
         comboBoxSelect();
     }
 
-    private void comboBoxSelect() {
+    protected void comboBoxSelect() {
         List<LineupDTO> lineList = lineupService.getAllLineup();
         comboBox.setItems(FXCollections.observableArrayList(lineList));
         comboBox.valueProperty().addListener(((observable, oldValue, newValue) -> openTreeView(newValue)));
     }
 
-    private void openTreeView(LineupDTO selectedLine) {
+    protected void openTreeView(LineupDTO selectedLine) {
+        if (selectedLine == null) {
+            treeView.setRoot(null);
+            return;
+        }
+
         titledLineup.setExpanded(false);
         titledModels.setDisable(false);
         titledModels.setExpanded(true);

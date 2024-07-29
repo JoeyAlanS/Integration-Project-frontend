@@ -5,6 +5,10 @@ public class CategoryDTO {
     private String categoryName;
     public String line;
 
+    public CategoryDTO(String categoryName , Short id) {
+        this.categoryName = categoryName;
+        this.id = id;
+    }
     public String toString() {
         return categoryName;
     }
